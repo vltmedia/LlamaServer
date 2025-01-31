@@ -22,7 +22,7 @@ A rest server that uses LLAMASharp to provide a REST API to generate text from a
 Change the model path, and the port number to your desired values, and any other options you would like to change.
 
 ```bash
-LlamaServer.exe --model "DeepSeek-R1-Distill-Llama-8B-Q8_0.gguf" --port 5598 --contextSize 1024 --gpuLayers 34 --maxTokens 256
+LlamaServer.exe --model "DeepSeek-R1-Distill-Llama-8B-Q8_0.gguf" --port 5598 --contextSize 1024 --gpuLayers 34 --maxTokens 256 --temperature 0.5 --seed 52 --returnJson true
 ```
 
 Currently the app is made to return a JSON string, if you would like to change this [Go to Changing Behavior](#changing-behavior).
@@ -50,6 +50,8 @@ curl -X POST "http://localhost:5598/generate" -H "Content-Type: application/json
 | `--port`        | ❌ No    | `5598`                                     | Port number for the REST API.      |
 | `--contextSize` | ❌ No    | `1024`                                     | Context size for Llama model.      |
 | `--gpuLayers`   | ❌ No    | `34`                                       | Number of GPU layers to offload.   |
+| `--seed`        | ❌ No    | `42`                                      | Seed used to change generated media.       |
+| `--temperature` | ❌ No    | `0.5`                                      | Temperature for the model.       |
 | `--maxTokens`   | ❌ No    | `256`                                      | Maximum tokens for response.       |
 | `--returnJson`  | ❌ No    | `true`                                     | Return a JSON string for response. |
 

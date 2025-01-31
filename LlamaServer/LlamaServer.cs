@@ -7,6 +7,7 @@ using LLama.Common;
 using LLama;
 using CommandLine;
 using static LlamaRestServer;
+using LLama.Sampling;
 
 class LlamaRestServer
 {
@@ -27,9 +28,13 @@ class LlamaRestServer
 
         [Option("gpuLayers", Required = false, Default = 34, HelpText = "Number of GPU layers to offload.")]
         public int GpuLayerCount { get; set; }
+        [Option("seed", Required = false, Default = 42, HelpText = "Seed used to change generated media.")]
+        public uint Seed { get; set; }
 
         [Option("maxTokens", Required = false, Default = 256, HelpText = "Maximum tokens for response.")]
         public int MaxTokens { get; set; }
+        [Option("temperature", Required = false, Default = 0.5f, HelpText = "Temperature for the model")]
+        public float Temperature { get; set; }
 
         [Option("returnJson", Required = false, Default = true, HelpText = "Return JSON response.")]
         public bool ReturnJson { get; set; } = true;
@@ -79,7 +84,12 @@ class LlamaRestServer
         inferenceParams = new InferenceParams()
         {
             MaxTokens = options.MaxTokens,
-            AntiPrompts = new List<string> { "}\n", "} ", "<|END|>", "<|END|>\n", "<|FINISHED|><|END|>\n" }
+            AntiPrompts = new List<string> { "}\n", "} ", "<|END|>", "<|END|>\n", "<|FINISHED|><|END|>\n" },
+            SamplingPipeline = new DefaultSamplingPipeline
+            {
+                Temperature = options.Temperature,
+                Seed = options.Seed
+            }
         };
 
         // ✅ Start REST API Server
