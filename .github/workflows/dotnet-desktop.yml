@@ -22,6 +22,14 @@ jobs:
       - name: Restore Dependencies
         run: dotnet restore LlamaServer.sln
 
+      - name: Remove Conflicting DLLs Before Build
+        run: |
+          rm -rf $HOME/.nuget/packages/llamasharp.backend.cpu/*/runtimes/win-x64/native/avx
+          rm -rf $HOME/.nuget/packages/llamasharp.backend.cpu/*/runtimes/win-x64/native/avx512
+          rm -rf $HOME/.nuget/packages/llamasharp.backend.cpu/*/runtimes/win-x64/native/noavx
+          echo "Removed conflicting CPU backend DLLs"
+
+
       - name: Build Project
         run: dotnet publish LlamaServer/LlamaServer.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:EnableCompressionInSingleFile=true -p:PublishTrimmed=true -o build
 
