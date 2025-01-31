@@ -17,8 +17,29 @@ A rest server that uses LLAMASharp to provide a REST API to generate text from a
 
 # Usage
 
+## Start the Server
+
+Change the model path, and the port number to your desired values, and any other options you would like to change.
+
 ```bash
-LlamaServer.exe --model "P:\CodeDump\DeepseekTest\DeepSeek-R1-GGU_1Q1S\DeepSeek-R1-Distill-Llama-8B-Q8_0.gguf" --port 5598 --contextSize 1024 --gpuLayers 34 --maxTokens 256
+LlamaServer.exe --model "DeepSeek-R1-Distill-Llama-8B-Q8_0.gguf" --port 5598 --contextSize 1024 --gpuLayers 34 --maxTokens 256
+```
+
+Currently the app is made to return a JSON string, if you would like to change this [Go to Changing Behavior](#changing-behavior).
+
+## Send a Request
+
+```bash
+curl -X POST "http://localhost:5598/generate" -H "Content-Type: application/json" -d "{\"UserInput\":\"Hi, my name is John Smith and I work at Place as a worker.\"}"
+```
+
+### Response
+
+```json
+{
+  "headline": "Worker's Vision Transforms Industry",
+  "body": "John Smith's innovative approach at Place is revolutionizing the field."
+}
 ```
 
 # Options
@@ -54,6 +75,8 @@ var chatHistory = new ChatHistory();
     + "Now generate a response in the same format. Begin output:\n"
 );
 ```
+### DeepSeek
+If you are using the DeepSeek models, especially Q2-Q6 versions, you will have to be explicit with the system message or it will start second guessing itself and ramble on and on.
 
 ## Antiprompts
 
