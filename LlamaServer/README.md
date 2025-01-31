@@ -5,6 +5,9 @@ A rest server that uses LLAMASharp to provide a REST API to generate text from a
 - Visual Studio 2022
 - Currently has ```LLAMASharp.Backend.Cuda12``` as the backend, change it out if you would rather have `Cuda11` or `CPU`.
 
+# Download
+- [Download the latest release](https://github.com/vltmedia/LlamaServer/releases)
+
 # Models
 `.gguf` files are required to run the server. These files can be found on the [HuggingFace](https://huggingface.co/models?library=gguf&sort=trending/) website.
 
