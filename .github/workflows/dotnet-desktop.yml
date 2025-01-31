@@ -32,10 +32,10 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: LlamaServer-${{ github.ref_name }}.zip
+          files: LlamaServer-${{ github.ref_name }}-win-x64.zip
           tag_name: ${{ github.ref_name }}
           release_name: LlamaServer ${{ github.ref_name }}
-          body: "Automated release for LlamaServer version ${{ github.ref_name }}"
+          body: "Automated release for LlamaServer version ${{ github.ref_name }} win-x64"
           draft: false
           prerelease: false
         env:
