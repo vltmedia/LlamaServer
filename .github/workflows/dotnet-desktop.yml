@@ -27,7 +27,7 @@ jobs:
         run: dotnet build LlamaServer/LlamaServer.csproj -c Release
 
       - name: Archive Build Artifact
-        run: Compress-Archive -Path LlamaServer\bin\Release\net8.0\* -DestinationPath LlamaServer-${{ github.ref_name }}.zip
+        run: Compress-Archive -Path LlamaServer\bin\Release\net8.0\* -DestinationPath LlamaServer-${{ github.ref_name }}-win-x64.zip
       
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
