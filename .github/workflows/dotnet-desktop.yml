@@ -22,22 +22,13 @@ jobs:
       - name: Restore Dependencies
         run: dotnet restore LlamaServer.sln
 
-      - name: Remove Conflicting DLLs Before Build (Windows)
-        shell: pwsh
-        run: |
-          Remove-Item -Recurse -Force "$env:USERPROFILE\.nuget\packages\llamasharp.backend.cpu\*\runtimes\win-x64\native\avx" -ErrorAction SilentlyContinue
-          Remove-Item -Recurse -Force "$env:USERPROFILE\.nuget\packages\llamasharp.backend.cpu\*\runtimes\win-x64\native\avx2" -ErrorAction SilentlyContinue
-          Remove-Item -Recurse -Force "$env:USERPROFILE\.nuget\packages\llamasharp.backend.cpu\*\runtimes\win-x64\native\avx512" -ErrorAction SilentlyContinue
-          Remove-Item -Recurse -Force "$env:USERPROFILE\.nuget\packages\llamasharp.backend.cpu\*\runtimes\win-x64\native\noavx" -ErrorAction SilentlyContinue
-          Write-Output "✅ Removed conflicting CPU backend DLLs"
-      
 
       - name: Build Project
-        run: dotnet publish LlamaServer/LlamaServer.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:EnableCompressionInSingleFile=true -p:PublishTrimmed=true -o build
+        run: dotnet build LlamaServer/LlamaServer.csproj -c Release
 
       - name: Archive Build Artifact
-        run: Compress-Archive -Path build/* -DestinationPath LlamaServer-${{ github.ref_name }}.zip
-
+        run: Compress-Archive -Path LlamaServer\bin\Release\net8.0\* -DestinationPath LlamaServer-${{ github.ref_name }}.zip
+      
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
