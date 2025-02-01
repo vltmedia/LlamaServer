@@ -33,15 +33,22 @@ namespace LlamaServer.Connector
             {
                 var installedPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LlamaServer.exe");
                 var installedPathProgramFiles = "C:/Program Files/Llama Server/Llama Server/LlamaServer.exe";
-                var installedPathDev = Path.Combine(Directory.GetParent(Directory.GetParent(Directory.GetParent(Directory.GetParent(Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.FullName)?.FullName)?.FullName)?.FullName)?.FullName, "LlamaServer\\bin\\Debug\\net8.0", "LlamaServer.exe");
-                if (ProcessPath == "")
+                var installedPathDev = "NOTTOBEFOUND/NO";
+                try
+                {
+                    installedPathDev = Path.Combine(Directory.GetParent(Directory.GetParent(Directory.GetParent(Directory.GetParent(Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.FullName)?.FullName)?.FullName)?.FullName)?.FullName, "LlamaServer\\bin\\Debug\\net8.0", "LlamaServer.exe");
+                }catch {
+                
+                
+                }
+                    if (ProcessPath == "")
                 {
                     if (System.IO.File.Exists(installedPath) && TryStart)
                     {
                         ProcessPath = installedPath;
 
                     }
-                    else if (System.IO.File.Exists(installedPathDev) && TryStart)
+                    else if (System.IO.File.Exists(installedPathDev) && installedPathDev != "NOTTOBEFOUND/NO"&& TryStart)
                     {
                         ProcessPath = installedPathDev;
 
