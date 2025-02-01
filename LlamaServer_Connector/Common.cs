@@ -52,8 +52,8 @@ namespace LlamaServer.Connector
         [Category("Network")]
         [DisplayName("Return JSON Response")]
         [Description("Return JSON response.")]
-        [DefaultValue(true)]
-        public bool ReturnJson { get; set; } = true;
+        [DefaultValue(false)]
+        public bool ReturnJson { get; set; } = false;
 
         [Category("Network")]
         [DisplayName("Auto Close On Quit")]

@@ -93,9 +93,13 @@ namespace LlamaServer_Connector_TestUI
 
                 settings.Load();
                 var resp= string.Format(
-                    "--model \"{0}\" --port {1} --contextSize {2} --gpuLayers {3} --seed {4} --maxTokens {5} --temperature {6} --returnJson {7} --systemPrompt \"{8}\" --antiPrompts \"{9}\"",
+                    "--model \"{0}\" --port {1} --contextSize {2} --gpuLayers {3} --seed {4} --maxTokens {5} --temperature {6}  --systemPrompt \"{8}\" --antiPrompts \"{9}\"",
                     settings.ModelPath, settings.Port, settings.ContextSize, settings.GpuLayerCount, settings.Seed, settings.MaxTokens, settings.Temperature, settings.ReturnJson, settings.SystemPrompt, settings.AntiPrompts
                     );
+                if(settings.ReturnJson)
+                {
+                    resp += " --returnJson";
+                }
                 return resp;
 
             } }
