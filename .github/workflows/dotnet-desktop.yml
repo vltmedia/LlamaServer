@@ -45,11 +45,11 @@ jobs:
           mkdir release
           mv LlamaServer_Installer\Release\*.msi release/LlamaServer-${{ github.ref_name }}-win-x64.msi
 
-      - name: Upload MSI Artifact
-        uses: actions/upload-artifact@v3
+      - name: Upload MSI Artifact (v4)
+        uses: actions/upload-artifact@v4
         with:
-          name: LlamaServer_Installer
           path: release/LlamaServer-${{ github.ref_name }}-win-x64.msi
+          compression-level: 0  # No compression for fastest uploads
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
