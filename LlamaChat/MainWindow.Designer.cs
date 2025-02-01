@@ -45,6 +45,7 @@ namespace LlamaServer_Connector_TestUI
             serverToolStripMenuItem = new ToolStripMenuItem();
             startServerToolStripMenuItem = new ToolStripMenuItem();
             killServerToolStripMenuItem = new ToolStripMenuItem();
+            openFileDialog1 = new OpenFileDialog();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -180,6 +181,12 @@ namespace LlamaServer_Connector_TestUI
             killServerToolStripMenuItem.Size = new Size(133, 22);
             killServerToolStripMenuItem.Text = "Kill Server";
             // 
+            // openFileDialog1
+            // 
+            openFileDialog1.DefaultExt = "gguf";
+            openFileDialog1.FileName = "openFileDialog1";
+            openFileDialog1.Filter = "GGUF Files|*.gguf|All files|*.*";
+            // 
             // MainWindow
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -224,5 +231,6 @@ namespace LlamaServer_Connector_TestUI
         private ToolStripMenuItem serverToolStripMenuItem;
         private ToolStripMenuItem startServerToolStripMenuItem;
         private ToolStripMenuItem killServerToolStripMenuItem;
+        private OpenFileDialog openFileDialog1;
     }
 }

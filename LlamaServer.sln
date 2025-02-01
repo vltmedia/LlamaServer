@@ -9,7 +9,7 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "LlamaServer_Installer", "Ll
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LlamaServer_Connector", "LlamaServer_Connector\LlamaServer_Connector.csproj", "{AD7A8575-7B62-4FF5-909D-4C38417CEAAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LlamaServer_Connector_TestUI", "LlamaServer_Connector_TestUI\LlamaServer_Connector_TestUI.csproj", "{E4B6D900-AD5E-43D3-B0A8-6CAA23741574}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LlamaChat", "LlamaChat\LlamaChat.csproj", "{E4B6D900-AD5E-43D3-B0A8-6CAA23741574}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

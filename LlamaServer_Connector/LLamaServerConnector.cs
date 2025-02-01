@@ -1,8 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace LlamaServer.Connector
 {
@@ -21,7 +23,7 @@ namespace LlamaServer.Connector
                 return ".exe";
             return "";
         }
-        public static void CheckProcessRunning( Action onRunning, Action onNotRunning, string Arguments = "", bool TryStart=false, string ProcessPath = "C:/Program Files/Llama Server/Llama Server/LlamaServer.exe", bool CreateNoWindow = false, System.Diagnostics.ProcessWindowStyle WindowStyle = System.Diagnostics.ProcessWindowStyle.Minimized)
+        public static void CheckProcessRunning( Action onRunning, Action onNotRunning, string Arguments = "", bool TryStart=false, string ProcessPath = "", bool CreateNoWindow = false, System.Diagnostics.ProcessWindowStyle WindowStyle = System.Diagnostics.ProcessWindowStyle.Minimized)
         {
             ProcessMonitor processMonitor = new ProcessMonitor(processName, () =>
             {
@@ -29,14 +31,35 @@ namespace LlamaServer.Connector
                 onRunning();
             }, () =>
             {
-               if(System.IO.File.Exists(ProcessPath ) && TryStart)
+                var installedPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LlamaServer.exe");
+                var installedPathProgramFiles = "C:/Program Files/Llama Server/Llama Server/LlamaServer.exe";
+                var installedPathDev = Path.Combine(Directory.GetParent(Directory.GetParent(Directory.GetParent(Directory.GetParent(Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.FullName)?.FullName)?.FullName)?.FullName)?.FullName, "LlamaServer\\bin\\Debug\\net8.0", "LlamaServer.exe");
+                if (ProcessPath == "")
+                {
+                    if (System.IO.File.Exists(installedPath) && TryStart)
+                    {
+                        ProcessPath = installedPath;
+
+                    }
+                    else if (System.IO.File.Exists(installedPathDev) && TryStart)
+                    {
+                        ProcessPath = installedPathDev;
+
+                    }
+                    else if (System.IO.File.Exists(installedPathProgramFiles) && TryStart)
+                    {
+                        ProcessPath = installedPathProgramFiles;
+
+                    }
+                   
+                }
+                if (System.IO.File.Exists(ProcessPath ) && TryStart)
                {
                     System.Diagnostics.Process process = new System.Diagnostics.Process();
-                    process.StartInfo.FileName = ProcessPath;
-                    process.StartInfo.WindowStyle = WindowStyle;
-                    process.StartInfo.CreateNoWindow = CreateNoWindow;
+                    process.StartInfo.FileName = $"\"{ProcessPath}\"";
                     process.StartInfo.Arguments = Arguments;
-                   System.Diagnostics.Process.Start(ProcessPath);
+                    process.StartInfo.WorkingDirectory = Path.GetDirectoryName(ProcessPath);
+                    process.Start();
                     onRunning();
                }
                else

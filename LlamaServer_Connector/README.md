@@ -1,3 +1,18 @@
+﻿# LLAMA Server Connector
+This is a a connector to the LlamaServer.exe
+
+# Features
+- Check if the LlamaServer is running
+- Auto start the LlamaServer if it isn't running
+- Kill the LlamaServer
+
+# Usage
+Import the `LLamaServer_Connector.dll` into your project.
+
+## Example
+```csharp
+
+
 using LlamaServer.Connector;
 using System.Windows.Forms;
 namespace LlamaServer_Connector_TestUI
@@ -7,16 +22,6 @@ namespace LlamaServer_Connector_TestUI
         public MainWindow()
         {
             InitializeComponent();
-            statusText.Text = "";
-
-            startServerToolStripMenuItem.Click += startServerToolStripMenuItem_Click;
-            killServerToolStripMenuItem.Click += killServerToolStripMenuItem_Click;
-
-        }
-
-        private void killServerToolStripMenuItem_Click(object? sender, EventArgs e)
-        {
-            button2_Click(sender, e);
         }
 
         private void startServerToolStripMenuItem_Click(object? sender, EventArgs e)
@@ -99,3 +104,5 @@ namespace LlamaServer_Connector_TestUI
         }
     }
 }
+
+```

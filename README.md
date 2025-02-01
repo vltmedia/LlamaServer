@@ -9,11 +9,21 @@ A rest server that uses LLAMASharp to provide a REST API to generate text from a
 
 
 # Solution Applications
+These applications get installed to `C:\Program Files\Llama Server\Llama Server` by default when using the installer.
 ## LlamaServer.exe
 The main application that runs the REST server.
 
 ## LlamaServer_Installer.msi
 An installer for the server. It will install the server to `C:\Program Files\Llama Server\Llama Server`, and add an icon to your Start Menu.
+
+## LlamaChat.exe
+A simple chat application example that connects to the server.
+[Checkout the README](LlamaChat/README.md)
+
+
+## LlamaServer_Connector.dll
+A connector to the LlamaServer.exe that allows another application to handle server lifecycle and settings.
+[Checkout the Example](LlamaServer_Connector/README.md)
 
 # Download
 

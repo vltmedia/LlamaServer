@@ -28,7 +28,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_E3AE4F3F64A44949A95005B4ABDCF7F3"
+        "MsmKey" = "8:_F1C040BE05B5471D821661C7DE55AB46"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -205,15 +205,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Llama Server"
-        "ProductCode" = "8:{AA250E4D-8061-4CE7-B513-490BAFF7BBC2}"
-        "PackageCode" = "8:{02A7BC23-08ED-44F5-8A43-405940E27E10}"
+        "ProductCode" = "8:{FE5D97C9-4F0C-472A-B264-BF38E88B20FB}"
+        "PackageCode" = "8:{7C0CF952-641B-428D-816C-123E57F2495B}"
         "UpgradeCode" = "8:{EF247621-81C6-49A3-888E-6161C55449BD}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:FALSE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:1.0.2"
         "Manufacturer" = "8:Llama Server"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -326,6 +326,20 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_1610BB12E958469884429166BBADF732"
+            {
+            "Name" = "8:LlamaChat"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_F1C040BE05B5471D821661C7DE55AB46"
+            "Folder" = "8:_1E35101022644C4794C7B710D019EA46"
+            "WorkingFolder" = "8:_97369C30EF8549FE973798CC3E213F2D"
+            "Icon" = "8:_788B55F38F184C87B305A97E93329E8E"
+            "Feature" = "8:"
+            }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_A3E5CF61232441D88BF8F2F828707B6D"
             {
             "Name" = "8:LlamaServer"
@@ -755,7 +769,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_87DF29F111A144BCA31A6EB18D6BCC84"
             {
-            "SourcePath" = "8:..\\LlamaServer\\obj\\Debug\\net8.0\\apphost.exe"
+            "SourcePath" = "8:..\\LlamaServer\\obj\\Release\\net8.0\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_97369C30EF8549FE973798CC3E213F2D"
@@ -781,9 +795,9 @@
                 {
                 }
             }
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_E3AE4F3F64A44949A95005B4ABDCF7F3"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_F1C040BE05B5471D821661C7DE55AB46"
             {
-            "SourcePath" = "8:..\\LlamaServer_Connector_TestUI\\obj\\Debug\\net8.0-windows\\apphost.exe"
+            "SourcePath" = "8:..\\LlamaChat\\obj\\Release\\net8.0-windows\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_97369C30EF8549FE973798CC3E213F2D"

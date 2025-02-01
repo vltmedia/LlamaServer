@@ -31,6 +31,7 @@ namespace LlamaServer_Connector_TestUI
         private void InitializeComponent()
         {
             PreferencesSettings preferencesSettings1 = new PreferencesSettings();
+            preferencesSettings1.Load();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Preferences));
             propertyGrid2 = new PropertyGrid();
             killServerButton = new Button();
