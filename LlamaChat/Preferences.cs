@@ -70,6 +70,7 @@ namespace LlamaServer_Connector_TestUI
             LlamaChat.Properties.Settings.Default.ReturnJson = ReturnJson;
             LlamaChat.Properties.Settings.Default.SystemPrompt = SystemPrompt;
             LlamaChat.Properties.Settings.Default.AntiPrompts = AntiPrompts;
+            LlamaChat.Properties.Settings.Default.Stream = Stream;
 
             LlamaChat.Properties.Settings.Default.Save(); // Saves settings to disk
         }
@@ -85,6 +86,7 @@ namespace LlamaServer_Connector_TestUI
             ReturnJson = LlamaChat.Properties.Settings.Default.ReturnJson;
             SystemPrompt = LlamaChat.Properties.Settings.Default.SystemPrompt;
             AntiPrompts = LlamaChat.Properties.Settings.Default.AntiPrompts;
+            Stream = LlamaChat.Properties.Settings.Default.Stream;
 
         }
         public static string Arguments { get
@@ -99,6 +101,10 @@ namespace LlamaServer_Connector_TestUI
                 if(settings.ReturnJson)
                 {
                     resp += " --returnJson";
+                }
+                if(settings.Stream)
+                {
+                    resp += " --stream";
                 }
                 return resp;
 

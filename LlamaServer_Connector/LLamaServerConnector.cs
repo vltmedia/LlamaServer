@@ -91,6 +91,42 @@ namespace LlamaServer.Connector
                 return await response.Content.ReadAsStringAsync();
             }
         }
+        public static async Task<string> SendPostRequestAsync(string url, string json, Action<string> onChunk)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                // Set request content type to JSON
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                // Use HttpRequestMessage for streaming
+                using (var request = new HttpRequestMessage(HttpMethod.Post, url) { Content = content })
+                using (var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead))
+                {
+                    response.EnsureSuccessStatusCode(); // Ensure HTTP success
+
+                    using (var stream = await response.Content.ReadAsStreamAsync())
+                    using (var reader = new StreamReader(stream, Encoding.UTF8))
+                    {
+                        StringBuilder fullResponse = new StringBuilder();
+                        char[] buffer = new char[1024];
+                        int bytesRead;
+
+                        while ((bytesRead = await reader.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                        {
+                            string chunk = new string(buffer, 0, bytesRead);
+                            fullResponse.Append(chunk);
+
+                            // ✅ Invoke the callback function with the received chunk
+                            onChunk?.Invoke(chunk);
+                        }
+
+                        return fullResponse.ToString();
+                    }
+                }
+            }
+        }
+
+
 
         public static string SendUserInput(string userInput, string host = "http://localhost")
         {
@@ -102,6 +138,18 @@ namespace LlamaServer.Connector
             userRequest.UserInput = userInput;
             string json = Newtonsoft.Json.JsonConvert.SerializeObject(userRequest);
             string res = await SendPostRequestAsync(string.Format("{0}:{1}", host, port), json);
+            if (res != null) {
+                return res;
+            }
+            return "";
+        }
+        
+        public static async Task<string> SendUserInputAsyncStream(string userInput, string host="http://localhost", Action<string> onChunk =null)
+        {
+            UserRequest userRequest = new UserRequest();
+            userRequest.UserInput = userInput;
+            string json = Newtonsoft.Json.JsonConvert.SerializeObject(userRequest);
+            string res = await SendPostRequestAsync(string.Format("{0}:{1}", host, port), json, onChunk);
             if (res != null) {
                 return res;
             }

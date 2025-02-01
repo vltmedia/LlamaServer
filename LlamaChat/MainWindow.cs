@@ -83,15 +83,39 @@ namespace LlamaServer_Connector_TestUI
         {
             chatHistory.Text += line + Environment.NewLine + Environment.NewLine;
         }
+        public void AppendText(string text)
+        {
+            chatHistory.Text += text;
+        }
         private async void sendButton_Click(object sender, EventArgs e)
         {
             statusText.Text = "Sending... " + userInput.Text;
             sendButton.Enabled = false;
-            var resp = await LLamaServerConnector.SendUserInputAsync(userInput.Text);
+            string resp = "";
             AddLine("User: " + userInput.Text);
-            AddLine("Bot: " + resp);
+
+            if (LlamaChat.Properties.Settings.Default.Stream)
+            {
+                AppendText("Bot: " );
+
+                resp = await LLamaServerConnector.SendUserInputAsyncStream(userInput.Text, onChunk: OnChunkReceived);
+                AppendText("\n");
+
+            }
+            else
+            {
+                resp = await LLamaServerConnector.SendUserInputAsync(userInput.Text);
+                AddLine("Bot: " + resp);
+
+            }
             statusText.Text = "Received: " + resp;
             sendButton.Enabled = true;
+
+        }
+
+        private void OnChunkReceived(string obj)
+        {
+            AppendText(obj);
 
         }
 

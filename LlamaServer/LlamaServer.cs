@@ -65,6 +65,10 @@ class LlamaRestServer
                     {
                         str += " --returnJson";
                     }
+                    if(Stream)
+                    {
+                        str += " --stream";
+                    }
                     return str;
                     
                     

@@ -10,7 +10,7 @@
     },
     "Profile 2": {
       "commandName": "Project",
-      "commandLineArgs": "--model \"P:\\CodeDump\\DeepseekTest\\DeepSeek-R1-GGU_1Q1S\\DeepSeek-R1-Distill-Llama-8B-Q8_0.gguf\" --port 5598 --contextSize 1024 --gpuLayers 34 --maxTokens 256 --temperature 0.5 --seed 52  --antiPrompts \"\\n,<|END|>\""
+      "commandLineArgs": "--model \"P:\\CodeDump\\DeepseekTest\\DeepSeek-R1-GGU_1Q1S\\DeepSeek-R1-Distill-Llama-8B-Q8_0.gguf\" --port 5598 --contextSize 1024 --gpuLayers 34 --maxTokens 256 --temperature 0.5 --seed 52  --antiPrompts \"\\n,<|END|>\" --stream"
     }
   }
 }

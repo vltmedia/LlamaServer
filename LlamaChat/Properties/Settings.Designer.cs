@@ -142,5 +142,17 @@ namespace LlamaChat.Properties {
                 this["AntiPrompts"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Stream {
+            get {
+                return ((bool)(this["Stream"]));
+            }
+            set {
+                this["Stream"] = value;
+            }
+        }
     }
 }

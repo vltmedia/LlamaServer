@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="LlamaServer_Connector_TestUI.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="LlamaChat.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="ModelPath" Type="System.String" Scope="User">
@@ -31,6 +31,9 @@
     </Setting>
     <Setting Name="AntiPrompts" Type="System.String" Scope="User">
       <Value Profile="(Default)">&lt;|END|&gt;</Value>
+    </Setting>
+    <Setting Name="Stream" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

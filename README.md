@@ -89,6 +89,93 @@ curl -X POST "http://localhost:5598" -H "Content-Type: application/json" -d "{\"
 | `--antiPrompts`  | ❌ No    | `""`                                     | The any extra [AntiPrompts](#antiprompts) to help stop generation from getting long. |
 | `--stream`  | ❌ No    | `false`                                     | Whether to stream the content back or as a single chunk. |
 
+
+## Ingest Stream
+### CSharp
+```csharp
+ public static async Task<string> SendPostRequestAsync(string url, string json, Action<string> onChunk)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                // Set request content type to JSON
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                // Use HttpRequestMessage for streaming
+                using (var request = new HttpRequestMessage(HttpMethod.Post, url) { Content = content })
+                using (var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead))
+                {
+                    response.EnsureSuccessStatusCode(); // Ensure HTTP success
+
+                    using (var stream = await response.Content.ReadAsStreamAsync())
+                    using (var reader = new StreamReader(stream, Encoding.UTF8))
+                    {
+                        StringBuilder fullResponse = new StringBuilder();
+                        char[] buffer = new char[1024];
+                        int bytesRead;
+
+                        while ((bytesRead = await reader.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                        {
+                            string chunk = new string(buffer, 0, bytesRead);
+                            fullResponse.Append(chunk);
+
+                            // ✅ Invoke the callback function with the received chunk
+                            onChunk?.Invoke(chunk);
+                        }
+
+                        return fullResponse.ToString();
+                    }
+                }
+            }
+        }
+```
+### JavaScript
+```javascript
+async function sendRequest() {
+            const userInput = document.getElementById("inputText").value;
+            const outputElement = document.getElementById("output");
+            outputElement.textContent = ""; // Clear previous response
+
+            const response = await fetch("http://localhost:5598/", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ UserInput: userInput })
+            });
+
+            if (!response.ok) {
+                outputElement.textContent = "Error: " + response.statusText;
+                return;
+            }
+
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let textBuffer = "";
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                textBuffer += decoder.decode(value, { stream: true });
+                outputElement.textContent = textBuffer; // Update text in real-time
+            }
+        }
+```
+### Python
+```python
+import requests
+
+url = "http://localhost:5598/"
+headers = {"Content-Type": "application/json"}
+payload = {"UserInput": "Tell me a story about AI."}
+
+with requests.post(url, json=payload, headers=headers, stream=True) as response:
+    if response.status_code == 200:
+        for chunk in response.iter_content(chunk_size=1024):
+            if chunk:
+                print(chunk.decode('utf-8'), end="", flush=True)  # Simulates typing effect
+    else:
+        print("Error:", response.status_code, response.text)
+
+```
+
 # Customizing
 
 ## Changing Behavior
@@ -123,3 +210,4 @@ Antiprompts are a way to keep the AI from generating infinitly. Build these stri
 ```csharp
 AntiPrompts = new List<string> { "}\n", "} ", "<|END|>", "<|END|>\n", "<|FINISHED|><|END|>\n" }
 ```
+

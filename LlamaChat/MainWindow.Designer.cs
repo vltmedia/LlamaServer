@@ -31,8 +31,6 @@ namespace LlamaServer_Connector_TestUI
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
-            startServerButton = new Button();
-            killServerButton = new Button();
             sendButton = new Button();
             userInput = new TextBox();
             statusText = new Label();
@@ -49,39 +47,13 @@ namespace LlamaServer_Connector_TestUI
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
-            // startServerButton
-            // 
-            startServerButton.FlatAppearance.BorderColor = Color.White;
-            startServerButton.FlatStyle = FlatStyle.Flat;
-            startServerButton.ForeColor = SystemColors.ControlLightLight;
-            startServerButton.Location = new Point(18, 402);
-            startServerButton.Name = "startServerButton";
-            startServerButton.Size = new Size(75, 23);
-            startServerButton.TabIndex = 0;
-            startServerButton.Text = "Start Server";
-            startServerButton.UseVisualStyleBackColor = true;
-            startServerButton.Click += button1_Click;
-            // 
-            // killServerButton
-            // 
-            killServerButton.FlatAppearance.BorderColor = Color.White;
-            killServerButton.FlatStyle = FlatStyle.Flat;
-            killServerButton.ForeColor = SystemColors.ControlLightLight;
-            killServerButton.Location = new Point(99, 402);
-            killServerButton.Name = "killServerButton";
-            killServerButton.Size = new Size(75, 23);
-            killServerButton.TabIndex = 1;
-            killServerButton.Text = "Kill Server";
-            killServerButton.UseVisualStyleBackColor = true;
-            killServerButton.Click += button2_Click;
-            // 
             // sendButton
             // 
             sendButton.Enabled = false;
             sendButton.FlatAppearance.BorderColor = Color.White;
             sendButton.FlatStyle = FlatStyle.Flat;
             sendButton.ForeColor = SystemColors.ControlLightLight;
-            sendButton.Location = new Point(713, 402);
+            sendButton.Location = new Point(713, 429);
             sendButton.Name = "sendButton";
             sendButton.Size = new Size(75, 23);
             sendButton.TabIndex = 2;
@@ -94,7 +66,7 @@ namespace LlamaServer_Connector_TestUI
             userInput.BackColor = Color.FromArgb(1, 3, 5);
             userInput.BorderStyle = BorderStyle.FixedSingle;
             userInput.ForeColor = SystemColors.Window;
-            userInput.Location = new Point(18, 328);
+            userInput.Location = new Point(18, 350);
             userInput.Multiline = true;
             userInput.Name = "userInput";
             userInput.Size = new Size(770, 69);
@@ -122,7 +94,7 @@ namespace LlamaServer_Connector_TestUI
             chatHistory.Multiline = true;
             chatHistory.Name = "chatHistory";
             chatHistory.ReadOnly = true;
-            chatHistory.Size = new Size(770, 271);
+            chatHistory.Size = new Size(770, 289);
             chatHistory.TabIndex = 6;
             // 
             // menuStrip1
@@ -197,8 +169,6 @@ namespace LlamaServer_Connector_TestUI
             Controls.Add(statusText);
             Controls.Add(userInput);
             Controls.Add(sendButton);
-            Controls.Add(killServerButton);
-            Controls.Add(startServerButton);
             Controls.Add(menuStrip1);
             ForeColor = SystemColors.ControlText;
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -212,13 +182,7 @@ namespace LlamaServer_Connector_TestUI
             PerformLayout();
         }
 
-
-
-
         #endregion
-
-        private Button startServerButton;
-        private Button killServerButton;
         private Button sendButton;
         private TextBox userInput;
         private Label statusText;

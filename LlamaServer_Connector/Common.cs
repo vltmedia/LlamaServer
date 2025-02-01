@@ -56,6 +56,13 @@ namespace LlamaServer.Connector
         public bool ReturnJson { get; set; } = false;
 
         [Category("Network")]
+        [DisplayName("Stream")]
+        [Description("Whether to recieve the generated content as a stream or a single chunk")]
+        [DefaultValue(false)]
+        public bool Stream { get; set; } = false;
+
+      
+        [Category("Network")]
         [DisplayName("Auto Close On Quit")]
         [Description("Auto close the server when the application quits.")]
         [DefaultValue(true)]
