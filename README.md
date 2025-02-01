@@ -67,7 +67,7 @@ curl -X POST "http://localhost:5598/generate" -H "Content-Type: application/json
 
 | Option            | Required | Default                                      | Description                        |
 | ----------------- | -------- | -------------------------------------------- | ---------------------------------- |
-| `--model`       | ✅ Yes   | `"DeepSeek-R1-Distill-Llama-8B-Q8_0.gguf"` | Path to the GGUF model file.       |
+| `--model`       | ❌ N   | `""`                                            | Path to the GGUF model file. Will [default](#auto-loading-model) if empty |
 | `--port`        | ❌ No    | `5598`                                     | Port number for the REST API.      |
 | `--contextSize` | ❌ No    | `1024`                                     | Context size for Llama model.      |
 | `--gpuLayers`   | ❌ No    | `34`                                       | Number of GPU layers to offload.   |
