@@ -51,7 +51,20 @@ class LlamaRestServer
 
         [Option("returnJson", Required = false, Default = false, HelpText = "Return JSON response.")]
         public bool ReturnJson { get; set; }
-  
+
+        public string Args { get {
+
+                var str = string.Format("--model \"{0}\" --port {1} --contextSize {2} --gpuLayers {3} --seed {4} --maxTokens {5} --temperature {6}  --systemPrompt \"{8}\" --antiPrompts \"{9}\"",
+                ModelPath, Port, ContextSize, GpuLayerCount, Seed, MaxTokens, Temperature, ReturnJson, SystemPrompt, AntiPrompts
+                );
+                    if(ReturnJson)
+                    {
+                        str += " --returnJson";
+                    }
+                    return str;
+                    
+                    
+                    ; } }
     }
 
     public static async Task Main(string[] args)
@@ -116,7 +129,7 @@ class LlamaRestServer
     {
         options = options_;
         options.ModelPath = VerifyModel(options.ModelPath);
-        
+        Console.WriteLine(options.Args);
         if (options.ModelPath == "")
         {
             Console.WriteLine("No model found. Please provide a valid model path.");
