@@ -51,7 +51,7 @@ Currently the app is made to return a JSON string, if you would like to change t
 ## Send a Request
 
 ```bash
-curl -X POST "http://localhost:5598/generate" -H "Content-Type: application/json" -d "{\"UserInput\":\"Hi, my name is John Smith and I work at Place as a worker.\"}"
+curl -X POST "http://localhost:5598" -H "Content-Type: application/json" -d "{\"UserInput\":\"Hi, my name is John Smith and I work at Place as a worker.\"}"
 ```
 
 ### Response
