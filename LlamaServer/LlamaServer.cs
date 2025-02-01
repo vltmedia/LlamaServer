@@ -51,6 +51,10 @@ class LlamaRestServer
 
         [Option("returnJson", Required = false, Default = false, HelpText = "Return JSON response.")]
         public bool ReturnJson { get; set; }
+        
+
+        [Option("stream", Required = false, Default = false, HelpText = "Wheter to return the data in a streaming manner or a single chunk.")]
+        public bool Stream { get; set; }
 
         public string Args { get {
 
@@ -205,7 +209,6 @@ class LlamaRestServer
         }
     }
 
-
     private static async Task HandleRequest(HttpListenerContext context)
     {
         HttpListenerRequest request = context.Request;
@@ -218,42 +221,46 @@ class LlamaRestServer
 
             try
             {
-                // ✅ Parse User Input
                 var requestData = JsonSerializer.Deserialize<UserRequest>(requestBody);
                 string formattedUserInput = $"<|User|>\n{requestData.UserInput}\n<|Assistant|>\nOutput:\n";
 
-                // ✅ Generate AI Response
-                StringBuilder aiResponse = new StringBuilder();
-                await foreach (var text in session!.ChatAsync(
-                    new ChatHistory.Message(AuthorRole.User, formattedUserInput),
-                    inferenceParams))
-                {
-                    aiResponse.Append(text);
-                }
+                response.StatusCode = 200;
+                response.ContentType = options.ReturnJson ? "application/json" : "text/plain";
 
-
-                // ✅ Extract JSON Response
-                if (options.ReturnJson == true)
+                if (options.Stream)
                 {
-                    string jsonResponse = ExtractJson(aiResponse.ToString());
-                    aiResponse.Clear();
-                    aiResponse.Append(jsonResponse.Replace("<|END|>", "").Replace("<|FINISH|>", "").Replace("<|START|>", ""));
-                    response.ContentType = "application/json";
+                    response.SendChunked = true;  // ✅ Enables streaming response
+                    await response.OutputStream.FlushAsync();  // Ensure headers are sent
+
+                    await foreach (var text in session!.ChatAsync(
+                        new ChatHistory.Message(AuthorRole.User, formattedUserInput),
+                        inferenceParams))
+                    {
+                        byte[] buffer = Encoding.UTF8.GetBytes(text);
+                        await response.OutputStream.WriteAsync(buffer, 0, buffer.Length);
+                        await response.OutputStream.FlushAsync(); // ✅ Ensures client gets each chunk
+                    }
                 }
                 else
                 {
-                    response.ContentType = "text/plain"; // Regular string response
+                    // ✅ Collect Full Response (No Streaming)
+                    StringBuilder aiResponse = new StringBuilder();
+                    await foreach (var text in session!.ChatAsync(
+                        new ChatHistory.Message(AuthorRole.User, formattedUserInput),
+                        inferenceParams))
+                    {
+                        aiResponse.Append(text);
+                    }
+
+                    byte[] buffer = Encoding.UTF8.GetBytes(aiResponse.ToString());
+                    response.ContentLength64 = buffer.Length;
+                    await response.OutputStream.WriteAsync(buffer, 0, buffer.Length);
                 }
 
-                // ✅ Send Response
-                byte[] buffer = Encoding.UTF8.GetBytes(aiResponse.ToString().Replace("<|END|>", "").Replace("<|FINISH|>", "").Replace("<|START|>", ""));
-                response.ContentLength64 = buffer.Length;
-                await response.OutputStream.WriteAsync(buffer);
                 response.OutputStream.Close();
             }
             catch (Exception ex)
             {
-                // Return error response
                 byte[] buffer = Encoding.UTF8.GetBytes($"{{ \"error\": \"{ex.Message}\" }}");
                 response.StatusCode = 500;
                 response.ContentType = "application/json";
@@ -268,6 +275,7 @@ class LlamaRestServer
             response.Close();
         }
     }
+
 
     // ✅ Extracts JSON from Llama output
     private static string ExtractJson(string responseText)

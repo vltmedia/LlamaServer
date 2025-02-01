@@ -77,7 +77,7 @@ curl -X POST "http://localhost:5598" -H "Content-Type: application/json" -d "{\"
 
 | Option            | Required | Default                                      | Description                        |
 | ----------------- | -------- | -------------------------------------------- | ---------------------------------- |
-| `--model`       | ❌ N   | `""`                                            | Path to the GGUF model file. Will [default](#auto-loading-model) if empty |
+| `--model`       | ❌ No   | `""`                                            | Path to the GGUF model file. Will [default](#auto-loading-model) if empty |
 | `--port`        | ❌ No    | `5598`                                     | Port number for the REST API.      |
 | `--contextSize` | ❌ No    | `1024`                                     | Context size for Llama model.      |
 | `--gpuLayers`   | ❌ No    | `34`                                       | Number of GPU layers to offload.   |
@@ -87,6 +87,7 @@ curl -X POST "http://localhost:5598" -H "Content-Type: application/json" -d "{\"
 | `--returnJson`  | ❌ No    | `true`                                     | Return a JSON string for response. |
 | `--systemPrompt`  | ❌ No    | `""`                                     | The system prompt that will control the AI Behavior. [Changing Behavior](#changing-behavior) |
 | `--antiPrompts`  | ❌ No    | `""`                                     | The any extra [AntiPrompts](#antiprompts) to help stop generation from getting long. |
+| `--stream`  | ❌ No    | `false`                                     | Whether to stream the content back or as a single chunk. |
 
 # Customizing
 
