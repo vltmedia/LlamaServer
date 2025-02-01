@@ -14,22 +14,29 @@ class LlamaRestServer
     private static ChatSession? session;
     private static InferenceParams inferenceParams;
     public static Options options;
+    public static string modelsFolderPath {get{
+            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "models");
+            }}
+    public static string modelsConfigPath {get{
+            return Path.Combine(modelsFolderPath, "config.json");
+            }}
+
     // ✅ Define command-line arguments
     public class Options
     {
-        [Option("model", Required = true, Default = "DeepSeek-R1-Distill-Llama-8B-Q8_0.gguf", HelpText = "Path to the GGUF model file.")]
+        [Option("model", Required = false, Default = "", HelpText = "Path to the GGUF model file.")]
         public string ModelPath { get; set; } = "";
 
         [Option("port", Required = false, Default = 5598, HelpText = "Port number for the REST API.")]
         public int Port { get; set; }
 
         [Option("contextSize", Required = false, Default = 1024, HelpText = "Context size for Llama model.")]
-        public uint ContextSize { get; set; }
+        public int ContextSize { get; set; }
 
         [Option("gpuLayers", Required = false, Default = 34, HelpText = "Number of GPU layers to offload.")]
         public int GpuLayerCount { get; set; }
         [Option("seed", Required = false, Default = 42, HelpText = "Seed used to change generated media.")]
-        public uint Seed { get; set; }
+        public int Seed { get; set; }
 
         [Option("maxTokens", Required = false, Default = 256, HelpText = "Maximum tokens for response.")]
         public int MaxTokens { get; set; }
@@ -48,15 +55,73 @@ class LlamaRestServer
             .WithParsedAsync(async options_ => await RunServer(options_));
             
     }
+    public static string VerifyModel(string path)
+    {
+        if (!System.IO.File.Exists(path))
+        {
+            if (Directory.Exists(modelsFolderPath))
+            {
+                // Check for a default model
+                if (File.Exists(modelsConfigPath))
+                {
+                    var configData = File.ReadAllText(modelsConfigPath);
+                    var data = JsonSerializer.Deserialize<Dictionary<string, string>>(configData);
 
+                    if (data.TryGetValue("DefaultModel", out string defaultValue))
+                    {
+                    //var config = JsonSerializer.Deserialize<Config>(configData);
+                    //if (config != null)
+                    //{
+                        if (defaultValue != "")
+                        {
+                            var defaultPath = Path.Combine(modelsFolderPath, defaultValue);
+                            if (File.Exists(defaultPath))
+                            {
+                                return defaultPath;
+                            }
+                        }
+                    }
+                }
+
+                // Check for any GGUF files in the models folder if no default model is set
+                var ggufFiles = Directory.GetFiles(modelsFolderPath, "*.gguf");
+                if (ggufFiles.Length > 0)
+                {
+                    return ggufFiles[0];
+                }
+                else
+                {
+                    return "";
+                }
+            }
+            else
+            {
+                Directory.CreateDirectory(modelsFolderPath);
+                return "";
+            }
+        }
+        else
+        {
+            return path;
+        }
+    }
 
     public static async Task RunServer(Options options_)
     {
         options = options_;
+        options.ModelPath = VerifyModel(options.ModelPath);
+        
+        if (options.ModelPath == "")
+        {
+            Console.WriteLine("No model found. Please provide a valid model path.");
+            Console.WriteLine("Alternatively, place a GGUF model file in the 'models' folder or set a default model in 'config.json'.");
+            Console.WriteLine("Shutting down.");
+            return;
+        }
         // ✅ Load LlamaSharp Model
         var parameters = new ModelParams(options.ModelPath)
         {
-            ContextSize = options.ContextSize,
+            ContextSize = (uint)options.ContextSize,
             GpuLayerCount = options.GpuLayerCount
         };
 
@@ -88,7 +153,7 @@ class LlamaRestServer
             SamplingPipeline = new DefaultSamplingPipeline
             {
                 Temperature = options.Temperature,
-                Seed = options.Seed
+                Seed = (uint)options.Seed
             }
         };
 
@@ -189,5 +254,12 @@ class LlamaRestServer
     public class UserRequest
     {
         public string UserInput { get; set; } = "";
+    }
+
+    // Define a class to match the JSON structure
+    [System.Serializable]
+    class Config
+    {
+        public string DefaultModel ;
     }
 }

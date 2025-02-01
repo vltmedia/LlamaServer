@@ -7,6 +7,14 @@ A rest server that uses LLAMASharp to provide a REST API to generate text from a
 - Visual Studio 2022
 - Currently has ``LLAMASharp.Backend.Cuda12`` as the backend, change it out if you would rather have `Cuda11` or `CPU`.
 
+
+# Solution Applications
+## LlamaServer.exe
+The main application that runs the REST server.
+
+## LlamaServer_Installer.msi
+An installer for the server. It will install the server to `C:\Program Files\Llama Server\Llama Server`, and add an icon to your Start Menu.
+
 # Download
 
 - [Download the latest release](https://github.com/vltmedia/LlamaServer/releases)
@@ -14,6 +22,19 @@ A rest server that uses LLAMASharp to provide a REST API to generate text from a
 # Models
 
 `.gguf` files are required to run the server. These files can be found on the [HuggingFace](https://huggingface.co/models?library=gguf&sort=trending/) website.
+
+## Auto Loading Model
+If you leave the `--model` option blank, the server will attempt to load the default model from the `config.json` file. If the file is not found or it's empty, the application will check if any `.gguf` files are in the `models` directory and load the first one it finds.
+
+## Model Config
+A model config file is available to aid in the default loading of a model at `Llama Server/models/config.json`. Just update the `DefaultModel` field to the path of your model.
+
+```json
+{
+  "DefaultModel": "DeepSeek-R1-Distill-Llama-8B-Q8_0.gguf"
+}
+```
+
 
 # Usage
 
