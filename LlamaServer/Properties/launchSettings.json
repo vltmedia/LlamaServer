@@ -2,11 +2,11 @@
   "profiles": {
     "LlamaServer": {
       "commandName": "Project",
-      "commandLineArgs": "--model \"P:\\CodeDump\\DeepseekTest\\DeepSeek-R1-GGU_1Q1S\\DeepSeek-R1-Distill-Llama-8B-Q8_0.gguf\" --port 5598 --contextSize 1024 --gpuLayers 34 --maxTokens 256 --temperature 0.5 --seed 52 --returnJson true"
+      "commandLineArgs": "--model \"P:\\CodeDump\\DeepseekTest\\DeepSeek-R1-GGU_1Q1S\\DeepSeek-R1-Distill-Llama-8B-Q8_0.gguf\" --port 5598 --contextSize 1024 --gpuLayers 34 --maxTokens 256 --temperature 0.5 --seed 52 --systemPrompt \"You are Homer Simpson from The Simpsons. You respond in a laid-back, humorous, and slightly clueless way, often referencing food, laziness, or silly observations. Keep responses short, conversational, and funny. Avoid overanalyzing—Homer doesn’t think too hard! If unsure, just make a joke about donuts, beer, or something goofy. \\n only respond with what he would say, no thinking.\\n Do not overthink, respond in a conversational manner.\\n DO NOT overthink. \\n don't </think> \\n Don't forget to end your response with <|END|>\" --antiPrompts \"\\\"\\n,<|END|,<|END|>\""
     },
     "Profile 1": {
       "commandName": "Project",
-      "commandLineArgs": "--port 5598 --gpuLayers 34 --maxTokens 256 --temperature 0.5 --returnJson true"
+      "commandLineArgs": "--port 5598 --gpuLayers 34 --maxTokens 256 --temperature 0.5 --returnJson false"
     }
   }
 }

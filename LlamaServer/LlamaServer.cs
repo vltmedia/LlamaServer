@@ -26,6 +26,12 @@ class LlamaRestServer
     {
         [Option("model", Required = false, Default = "", HelpText = "Path to the GGUF model file.")]
         public string ModelPath { get; set; } = "";
+        
+        [Option("systemPrompt", Required = false, Default = "", HelpText = "System Prompt that will handle the behavior")]
+        public string SystemPrompt { get; set; } = "";
+
+        [Option("antiPrompts", Required = false, Default = "", HelpText = "Anti-prompts to stop the model from generating. Comma sepperated")]
+        public string AntiPrompts { get; set; } = "";
 
         [Option("port", Required = false, Default = 5598, HelpText = "Port number for the REST API.")]
         public int Port { get; set; }
@@ -43,8 +49,8 @@ class LlamaRestServer
         [Option("temperature", Required = false, Default = 0.5f, HelpText = "Temperature for the model")]
         public float Temperature { get; set; }
 
-        [Option("returnJson", Required = false, Default = true, HelpText = "Return JSON response.")]
-        public bool ReturnJson { get; set; } = true;
+        [Option("returnJson", Required = false, Default = false, HelpText = "Return JSON response.")]
+        public bool ReturnJson { get; set; }
   
     }
 
@@ -132,24 +138,33 @@ class LlamaRestServer
         // ✅ Strict JSON Prompt Setup
         var chatHistory = new ChatHistory();
         chatHistory.AddMessage(AuthorRole.System,
+            options.SystemPrompt != "" ? options.SystemPrompt.Replace("\\n", "\n") :
     "You are a pulitzer prize headline writer. Write a Headline and Body text for an Magazine front-page headline about the person in the data provided. Make the generated JSON string about them and the answers provided. \n"
-    + "Incorporate the person's name, and company, artistically allude to the person's title, and answers.  \n"
-    + "Headline should be a maximum of 8 words, and Body should be a maximum of 20 words. \n"
-    + "You must generate a JSON string in this format: \n"
-    + "<|START|>{ \"headline\": \"Your headline here\", \"body\": \"Your body text here\" }<|FINISHED|><|END|>\n"
-    + "You MUST ONLY return a valid JSON string. DO NOT provide explanations. DO NOT add extra text. \n"
-    + "When you are finished, respond with <|END|>. \n"
-    + "Example:\n"
-    + "Output:\n"
-    + "<|START|>{ \"headline\": \"AI Breakthrough Redefines Business\", \"body\": \"Industry experts say this changes everything.\" }<|FINISHED|><|END|> \n"
-    + "Now generate a response in the same format. Begin output:\n"
+    + "Use <|START|> to start the response, and end your response with <|FINISHED|><|END|>\n"
+    + "You must generate a response in this format: \n"
+    + "<|START|>Your response here<|FINISHED|><|END|>\n"
+    + "When you are finished, respond with <|FINISHED|><|END|>. \n"
+    
 );
 
         session = new ChatSession(executor, chatHistory);
+        List<string> AntiPrompts = new List<string>() { "}\n", "} ", "<|END|>", "<|END|>\n", "<|FINISHED|><|END|>\n" };
+        if (options.AntiPrompts != "")
+        {
+            if (options.AntiPrompts.Contains(","))
+            {
+                AntiPrompts.AddRange(options.AntiPrompts.Replace("\\n", "\n").Split(',').ToList());
+            }
+            else
+            {
+                AntiPrompts.Add(options.AntiPrompts.Replace("\\n", "\n"));
+            }
+
+        }
         inferenceParams = new InferenceParams()
         {
             MaxTokens = options.MaxTokens,
-            AntiPrompts = new List<string> { "}\n", "} ", "<|END|>", "<|END|>\n", "<|FINISHED|><|END|>\n" },
+            AntiPrompts = AntiPrompts,
             SamplingPipeline = new DefaultSamplingPipeline
             {
                 Temperature = options.Temperature,
@@ -205,16 +220,20 @@ class LlamaRestServer
 
 
                 // ✅ Extract JSON Response
-                if(options.ReturnJson == true)
+                if (options.ReturnJson == true)
                 {
                     string jsonResponse = ExtractJson(aiResponse.ToString());
                     aiResponse.Clear();
-                    aiResponse.Append(jsonResponse);
+                    aiResponse.Append(jsonResponse.Replace("<|END|>", "").Replace("<|FINISH|>", "").Replace("<|START|>", ""));
+                    response.ContentType = "application/json";
+                }
+                else
+                {
+                    response.ContentType = "text/plain"; // Regular string response
                 }
 
-                // ✅ Send JSON Response
-                byte[] buffer = Encoding.UTF8.GetBytes(aiResponse.ToString());
-                response.ContentType = "application/json";
+                // ✅ Send Response
+                byte[] buffer = Encoding.UTF8.GetBytes(aiResponse.ToString().Replace("<|END|>", "").Replace("<|FINISH|>", "").Replace("<|START|>", ""));
                 response.ContentLength64 = buffer.Length;
                 await response.OutputStream.WriteAsync(buffer);
                 response.OutputStream.Close();

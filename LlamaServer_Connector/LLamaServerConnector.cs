@@ -21,16 +21,21 @@ namespace LlamaServer.Connector
                 return ".exe";
             return "";
         }
-        public static void CheckProcessRunning( Action onRunning, Action onNotRunning, string ProcessPath = "C:/Program Files/Llama Server/Llama Server/LlamaServer.exe")
+        public static void CheckProcessRunning( Action onRunning, Action onNotRunning, string Arguments = "", bool TryStart=false, string ProcessPath = "C:/Program Files/Llama Server/Llama Server/LlamaServer.exe", bool CreateNoWindow = false, System.Diagnostics.ProcessWindowStyle WindowStyle = System.Diagnostics.ProcessWindowStyle.Minimized)
         {
-            ProcessMonitor processMonitor = new ProcessMonitor(processNameOS, () =>
+            ProcessMonitor processMonitor = new ProcessMonitor(processName, () =>
             {
-                port = ProcessMonitor.GetProcessPort(processName) ?? port;
+                //port = ProcessMonitor.GetProcessPort(processName) ?? port;
                 onRunning();
             }, () =>
             {
-               if(System.IO.File.Exists(ProcessPath ))
+               if(System.IO.File.Exists(ProcessPath ) && TryStart)
                {
+                    System.Diagnostics.Process process = new System.Diagnostics.Process();
+                    process.StartInfo.FileName = ProcessPath;
+                    process.StartInfo.WindowStyle = WindowStyle;
+                    process.StartInfo.CreateNoWindow = CreateNoWindow;
+                    process.StartInfo.Arguments = Arguments;
                    System.Diagnostics.Process.Start(ProcessPath);
                     onRunning();
                }
@@ -72,10 +77,10 @@ namespace LlamaServer.Connector
             }
             return "";
         }
-
+        
         public static void KillProcess()
         {
-            ProcessMonitor.KillProcessByName(processNameOS);
+            ProcessMonitor.KillProcessByName(processName);
         }
         public class UserRequest
         {

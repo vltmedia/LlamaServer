@@ -75,12 +75,14 @@ curl -X POST "http://localhost:5598" -H "Content-Type: application/json" -d "{\"
 | `--temperature` | ❌ No    | `0.5`                                      | Temperature for the model.       |
 | `--maxTokens`   | ❌ No    | `256`                                      | Maximum tokens for response.       |
 | `--returnJson`  | ❌ No    | `true`                                     | Return a JSON string for response. |
+| `--systemPrompt`  | ❌ No    | `""`                                     | The system prompt that will control the AI Behavior. [Changing Behavior](#changing-behavior) |
+| `--antiPrompts`  | ❌ No    | `""`                                     | The any extra [AntiPrompts](#antiprompts) to help stop generation from getting long. |
 
 # Customizing
 
 ## Changing Behavior
 
-To replace the base behavior of the ai, change the `.system` message that we pass into the model:
+To replace the base behavior of the ai, change the `.system` message that we pass into the model or pass in the `--systemPrompt` argument at startup:
 
 ```csharp
 var chatHistory = new ChatHistory();
@@ -98,6 +100,8 @@ var chatHistory = new ChatHistory();
     + "Now generate a response in the same format. Begin output:\n"
 );
 ```
+### Prebuilt System Messages
+Check the `prompts` folder for prebuilt system messages.
 ### DeepSeek
 If you are using the DeepSeek models, especially Q2-Q6 versions, you will have to be explicit with the system message or it will start second guessing itself and ramble on and on.
 

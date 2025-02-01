@@ -1,0 +1,36 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="LlamaServer_Connector_TestUI.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="ModelPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Port" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">5598</Value>
+    </Setting>
+    <Setting Name="ContextSize" Type="System.UInt32" Scope="User">
+      <Value Profile="(Default)">1024</Value>
+    </Setting>
+    <Setting Name="GpuLayerCount" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="Seed" Type="System.UInt32" Scope="User">
+      <Value Profile="(Default)">42</Value>
+    </Setting>
+    <Setting Name="MaxTokens" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">256</Value>
+    </Setting>
+    <Setting Name="Temperature" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">0.5</Value>
+    </Setting>
+    <Setting Name="ReturnJson" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="SystemPrompt" Type="System.String" Scope="User">
+      <Value Profile="(Default)">You are a knowledgeable and articulate AI assistant. Respond in a clear, concise, and conversational manner without overthinking or thinking out loud. Provide direct and well-informed answers without unnecessary explanations or hesitation. Keep responses engaging, natural, and to the point, adapting to the user's tone and preferences. If asked for opinions, provide thoughtful yet succinct insights. Avoid filler words, excessive reasoning, or uncertainty—just respond confidently and conversationally.</Value>
+    </Setting>
+    <Setting Name="AntiPrompts" Type="System.String" Scope="User">
+      <Value Profile="(Default)">&lt;|END|&gt;</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
