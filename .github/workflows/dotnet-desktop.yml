@@ -22,17 +22,39 @@ jobs:
       - name: Restore Dependencies
         run: dotnet restore LlamaServer.sln
 
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.1
 
-      - name: Build Project
-        run: dotnet build LlamaServer/LlamaServer.csproj -c Release
+      - name: Find Visual Studio Path
+        run: |
+          $vsPath = &"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.Component.MSBuild -property installationPath
+          echo "VS_PATH=$vsPath" >> $env:GITHUB_ENV
+
+      - name: Build Installer
+        run: |
+          &"$env:VS_PATH\Common7\IDE\devenv.com" LlamaServer.sln /Project LlamaServer_Installer/LlamaServer_Installer.vdproj /Build "Release"
 
       - name: Archive Build Artifact
         run: Compress-Archive -Path LlamaServer\bin\Release\net8.0\* -DestinationPath LlamaServer-${{ github.ref_name }}-win-x64.zip
-      
+      - name: List Output Files (Debugging)
+        run: |
+          dir /s /b LlamaServer_Installer\Release
+
+      - name: Rename MSI File for Release
+        run: |
+          mkdir release
+          mv LlamaServer_Installer\Release\*.msi release/LlamaServer-${{ github.ref_name }}-win-x64.msi
+
+      - name: Upload MSI Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: LlamaServer_Installer
+          path: release/LlamaServer-${{ github.ref_name }}-win-x64.msi
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: LlamaServer-${{ github.ref_name }}-win-x64.zip
+          files: release/LlamaServer-${{ github.ref_name }}-win-x64.msi
           tag_name: ${{ github.ref_name }}
           release_name: LlamaServer ${{ github.ref_name }}
           body: "Automated release for LlamaServer version ${{ github.ref_name }} win-x64"
